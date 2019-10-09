@@ -13,22 +13,29 @@ import {
 import { connect } from "react-redux";
 
 // Actions
-import { login } from "../redux/actions/authActions";
+import { authorize } from "../redux/actions/authActions";
 
 class LoginForm extends Component {
   state = {
     username: "",
-    password: ""
+    password: "",
+    type: "login"
   };
   handleChange = keyValue => {
     this.setState(keyValue);
   };
 
   handleSubmit = () => {
-    this.props.login(this.state);
+    this.props.authorize(this.state);
   };
 
+  // changeType = type => {
+  //   type === "login" ? (type = "register") : (type = "login");
+  //   console.log("TCL: LoginForm -> type", type);
+  // };
+
   render() {
+    console.log(this.type);
     const { username, password } = this.state;
     // console.log(this.state);
     return (
@@ -44,7 +51,7 @@ class LoginForm extends Component {
                 onChangeText={username => this.handleChange({ username })}
               />
             </Item>
-            <Item last>
+            <Item>
               <Input
                 value={password}
                 placeholder="Password"
@@ -54,9 +61,21 @@ class LoginForm extends Component {
               />
             </Item>
             <Button onPress={this.handleSubmit}>
-              <Text>Login</Text>
+              <Text>{this.state.type}</Text>
             </Button>
           </Form>
+          <Text
+            style={{ color: "blue", textAlign: "center" }}
+            onPress={() =>
+              this.state.type === "login"
+                ? this.setState({ type: "register" })
+                : this.setState({ type: "login" })
+            }
+          >
+            {this.state.type === "register"
+              ? "login with existing account"
+              : "not a user register"}
+          </Text>
         </Content>
       </Container>
     );
@@ -65,7 +84,7 @@ class LoginForm extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    login: user => dispatch(login(user))
+    authorize: user => dispatch(authorize(user))
   };
 };
 
@@ -73,3 +92,7 @@ export default connect(
   null,
   mapDispatchToProps
 )(LoginForm);
+
+// type === "login"
+//   ? (type="register")
+//   : (type = "login")

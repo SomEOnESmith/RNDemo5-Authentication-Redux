@@ -21,17 +21,21 @@ const setCurrentUser = token => {
   };
 };
 
-export const login = userData => {
+export const authorize = userObj => {
+  console.log("TCL: userObj", userObj);
+  userData = { username: userObj.username, password: userObj.password };
+  // if (userObj.type === "register") userData["email"] = userObj.email;
+  console.log("TCL: userData", userData);
   return async dispatch => {
     try {
       const res = await axios.post(
-        "https://precious-things.herokuapp.com/login/",
+        `http://178.128.114.232/api/${userObj.type}/`,
         userData
       );
       const user = res.data;
       dispatch(setCurrentUser(user.token));
     } catch (err) {
-      console.error(err);
+      console.error("ERROR ===================>", err);
     }
   };
 };
